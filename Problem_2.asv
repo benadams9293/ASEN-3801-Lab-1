@@ -13,22 +13,20 @@
 %  - Assume the object is here in Boulder to determine the air 
 %       density
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Null = 0;
+N
 %% Variables
 t = NULL; % UNKOWN
 Cd = 0.6 ; %[NaN] Coefficient of drag
-A = NULL; % UNKOWN
-m = .050; %[kg] Mass
+A = 0; % UNKOWN
+m = 50; %[g] Mass
 g = [0 0 9.8]; %[m/s^2] Gravity
 wind_vel = []; % three-dimensional wind velocity in inertial coordinates
-x_initial = [ NULL NULL NULL; 20 20 0]; %[m/s]
-wind_velocity = 0;
+
 
 % Get State Vector
 x = [pEE; vEE];
 
-% Get rho using stdatmo.m
-%   Boulder at a geopotential altitude of 1655m on a standard day
+% Get rho
 rho = NULL ; %[kg/m³] Air density
 
 

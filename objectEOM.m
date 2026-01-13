@@ -21,7 +21,9 @@ function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
 
 %% Varriables
 d = 2; %[cm] diameter
-wind_vel = []; % three-dimensional wind velocity in inertial coordinates
+
+%% derive the inertial acceleration
+
 
 
 
