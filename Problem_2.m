@@ -16,13 +16,20 @@
 Null = 0;
 %% Variables
 t = NULL; % UNKOWN
+rho = 1.14; %[kg/m^3] Boulder Air Density
 Cd = 0.6 ; %[NaN] Coefficient of drag
-A = NULL; % UNKOWN
+d = 2.0 *10^-2; % [m] diameter
+A = pi*(d/2)^2; % [m^2] Area
 m = .050; %[kg] Mass
 g = [0 0 9.8]; %[m/s^2] Gravity
-wind_vel = []; % three-dimensional wind velocity in inertial coordinates
-x_initial = [ NULL NULL NULL; 20 20 0]; %[m/s]
+wind_vel = [5 0 0]; % dummy var :: three-dimensional wind velocity in inertial coordinates
+x_initial = [ 5 0 -5; 0 20 -20]; %[m/s] :: the position variables are all dummy
 
+% Get State Vector
+x = [pEE; vEE];
+
+
+xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
 
 %% Part a
 
