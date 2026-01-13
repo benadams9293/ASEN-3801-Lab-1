@@ -23,11 +23,11 @@ function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
 d = 2; %[cm] diameter
 
 %% derive the inertial acceleration
-
+aEE = 
 
 
 
 %% Output
-xdot = 0; % Derrivative of State Vector x
+xdot = [vEE ; aEE]; % Derrivative of State Vector x
 end
 

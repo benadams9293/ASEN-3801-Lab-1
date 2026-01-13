@@ -21,7 +21,7 @@ A = NULL; % UNKOWN
 m = .050; %[kg] Mass
 g = [0 0 9.8]; %[m/s^2] Gravity
 wind_vel = []; % three-dimensional wind velocity in inertial coordinates
-x_initial = [ NULL NULL NULL; 20 20 0]; %[m/s]
+x_initial = [ NULL NULL NULL; 0 20 -20]; %[m/s]
 
 
 %% Part a
@@ -35,6 +35,8 @@ rho = NULL ; %[kg/m³] Air density
 wind_vel = [0 0 0];
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
 
+ode45()
+
 % Plot the trajectory of the object in three-dimensional space using a 
 % three-dimensional figure in MATLAB
 figure(Name="Problem 2 - part c")
@@ -45,6 +47,7 @@ hold off
 %% Part d
 wind_vel = [NULL NULL NULL];
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
+
 
 % d1)
 
