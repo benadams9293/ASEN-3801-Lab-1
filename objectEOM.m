@@ -4,17 +4,18 @@ function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
 % File name: objectEOM.m
 % Created: 1/13/2026
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Inputs: velocity_body = column vector of aircraft air-relative velocity 
-%                         in body coordinates
-%                       = [u,v,w]’
+% Inputs: t = 
+%         x = 
+%         rho = 
+%         Cd = 
+%         A = 
+%         m =
+%         g =
+%         wind_vel = 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Outputs: wind_angles = [speed beta alpha]’
-%          speed = aircraft airspeed
-%          beta = side slip angle
-%          alpha = angle of attack
+% Outputs: xdot
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Methodology: Use definitions to calculate wind angles and speed from 
-%               velocity vector
+% Methodology: Bro idk
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %% 
