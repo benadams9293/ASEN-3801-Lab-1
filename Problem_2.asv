@@ -13,23 +13,42 @@
 %  - Assume the object is here in Boulder to determine the air 
 %       density
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-N
+Null = 0;
 %% Variables
 t = NULL; % UNKOWN
 Cd = 0.6 ; %[NaN] Coefficient of drag
-A = 0; % UNKOWN
-m = 50; %[g] Mass
+A = NULL; % UNKOWN
+m = .050; %[kg] Mass
 g = [0 0 9.8]; %[m/s^2] Gravity
 wind_vel = []; % three-dimensional wind velocity in inertial coordinates
+x_initial = [ NULL NULL NULL; 20 20 0]; %[m/s]
 
 
-% Get State Vector
-x = [pEE; vEE];
+%% Part a
 
-% Get rho
+%% Part b
+% Get rho using stdatmo.m
+%   Boulder at a geopotential altitude of 1655m on a standard day
 rho = NULL ; %[kg/m³] Air density
 
-
-
-%% Call Functions
+%% Part c
+wind_vel = [0 0 0];
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
+
+% Plot the trajectory of the object in three-dimensional space using a 
+%          three-dimensional figure inMATLAB
+
+%% Part d
+wind_vel = [NULL NULL NULL];
+xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
+
+% d1)
+
+% d2)
+
+%% Part e
+
+%% Part f
+
+
+

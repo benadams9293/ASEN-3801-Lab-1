@@ -23,23 +23,36 @@ g = [0 0 9.8]; %[m/s^2] Gravity
 wind_vel = []; % three-dimensional wind velocity in inertial coordinates
 x_initial = [ NULL NULL NULL; 20 20 0]; %[m/s]
 
-% Get State Vector
-x = [pEE; vEE];
 
+%% Part a
+
+%% Part b
 % Get rho using stdatmo.m
 %   Boulder at a geopotential altitude of 1655m on a standard day
 rho = NULL ; %[kg/m³] Air density
 
-
-
-%% Call Functions
-% Part c
+%% Part c
 wind_vel = [0 0 0];
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
 
-% part d
+% Plot the trajectory of the object in three-dimensional space using a 
+% three-dimensional figure in MATLAB
+figure(Name="Problem 2 - part c")
+hold on
+plot3()
+hold off
+
+%% Part d
 wind_vel = [NULL NULL NULL];
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
+
+% d1)
+
+% d2)
+
+%% Part e
+
+%% Part f
 
 
 
