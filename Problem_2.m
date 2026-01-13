@@ -22,7 +22,6 @@ m = .050; %[kg] Mass
 g = [0 0 9.8]; %[m/s^2] Gravity
 wind_vel = []; % three-dimensional wind velocity in inertial coordinates
 x_initial = [ NULL NULL NULL; 20 20 0]; %[m/s]
-wind_velocity = 0;
 
 % Get State Vector
 x = [pEE; vEE];
@@ -34,4 +33,13 @@ rho = NULL ; %[kg/m³] Air density
 
 
 %% Call Functions
+% Part c
+wind_vel = [0 0 0];
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
+
+% part d
+wind_vel = [NULL NULL NULL];
+xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
+
+
+
