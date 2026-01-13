@@ -4,20 +4,34 @@ function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
 % File name: objectEOM.m
 % Created: 1/13/2026
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Inputs: velocity_body = column vector of aircraft air-relative velocity 
-%                         in body coordinates
-%                       = [u,v,w]’
+% Inputs: t = 
+%         x = 
+%         rho = 
+%         Cd = 0.6 [NaN] Coefficient of drag
+%         A = 
+%         m = 50 [g] Mass
+%         g =
+%         wind_vel = 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Outputs: wind_angles = [speed beta alpha]’
-%          speed = aircraft airspeed
-%          beta = side slip angle
-%          alpha = angle of attack
+% Outputs: xdot
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Methodology: Use definitions to calculate wind angles and speed from 
-%               velocity vector
+% Methodology: Study the translational dynamics of a spherical object 
+%              moving through the air in an approximate dynamical model.
+%  - Assume that the forces acting on the body are not a function of the 
+%      body attitude. 
+%       - The forces acting on the bodyinclude aerodynamic drag and gravity
+%  - Right-handed and orthogonal axes of the inertial frame follow the 
+%       convention North-East-Down. In this problem, let's model the object
+%       with a mass of 50 g, a diameter of 2.0 cm, and coefficient of drag 
+%       of 0.6. Assume the object is here in Boulder to determine the air 
+%       density
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%% 
+%% Varriables
+d = 2; %[cm] diameter
+
+
+%% Output
 xdot = 0;
 end
 
