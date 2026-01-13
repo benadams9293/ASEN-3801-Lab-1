@@ -5,7 +5,7 @@ function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
 % Created: 1/13/2026
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 % Inputs: t = 
-%         x = 
+%         x = State Vector
 %         rho = 1.14 [kg/m³] Air density
 %         Cd = 0.6 [NaN] Coefficient of drag
 %         A = 
@@ -13,24 +13,19 @@ function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
 %         g =
 %         wind_vel = 
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Outputs: xdot
-%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-% Methodology: Study the translational dynamics of a spherical object 
-%              moving through the air in an approximate dynamical model.
-%  - Assume that the forces acting on the body are not a function of the 
-%      body attitude. 
-%       - The forces acting on the bodyinclude aerodynamic drag and gravity
-%  - Right-handed and orthogonal axes of the inertial frame follow the 
-%       convention North-East-Down
-%  - Assume the object is here in Boulder to determine the air 
-%       density
+% Outputs: xdot = Derrivative of State Vector x (with respect to time as a 
+%                    function of the time,the state, the physical 
+%                    parameters of the problem, and the three-dimensional 
+%                    wind velocity in inertial coordinates)
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %% Varriables
 d = 2; %[cm] diameter
+wind_vel = []; % three-dimensional wind velocity in inertial coordinates
+
 
 
 %% Output
-xdot = 0;
+xdot = 0; % Derrivative of State Vector x
 end
 
