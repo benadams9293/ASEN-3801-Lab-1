@@ -26,39 +26,37 @@ wind_vel = [5 0 0]; % dummy var :: three-dimensional wind velocity in inertial c
 x_initial = [ 5 0 -5 0 20 -20]'; %[m/s] :: the position variables are all dummy
 
 %% Rho
-% - stdatmo.m
-% - Boulder at a geopotential altitude of 1655m on a standard day
+    % Get Rho
+    % Boulder at a geopotential altitude of 1655m on a standard day
+    [rho,a,T,P,nu,ZorH] = stdatmo(1655,0,'',true); %[kg/m³] Air density
+
+%% Const. Wind velocity | Const. Rho
+    wind_vel = [0 0 0];
+    
+    % State vector
+    [t,x] = ode45(@(t,x) objectEOM(t,x_0,rho,Cd,A,m,g,wind_vel),tspan,statevector_0);
+    
+    figure(Name="Problem 2 - part c")
+    hold on
+    plot3()
+    hold off
+    
+%% Varriable Wind velociticy | Const. Rho
+    
+    % State vector
+    [t,x] = ode45(@(t,x) objectEOM(t,x_0,rho,Cd,A,m,g,wind_vel),tspan,statevector_0);
+    
+    figure(Name="Problem 2 - part d")
+    hold on
+    plot3()
+    hold off
 
 
-%% Wind velocity const. 0
-wind_vel = [0 0 0];
-
-% State vector
-[t,x] = ode45(@(t,x) objectEOM(t,x_0,rho,Cd,A,m,g,wind_vel),tspan,statevector_0);
-
-figure(Name="Problem 2 - part c")
-hold on
-plot3()
-hold off
-
-%% Wind velociticy varrying
-
-% State vector
-[t,x] = ode45(@(t,x) objectEOM(t,x_0,rho,Cd,A,m,g,wind_vel),tspan,statevector_0);
-
-figure(Name="Problem 2 - part d")
-hold on
-plot3()
-hold off
-
-%% Part b
-[rho,a,T,P,nu,ZorH] = stdatmo(1655,0,'',true); %[kg/m³] Air density
-
-%% Part e
+%% Varriable Rho | Const. Wind velocity 
 
 
 
-%% Part f
+%% Varriable Mass | Const. Wind Velocity | Const. Rho | Const. Specific Energy
 
 
 
