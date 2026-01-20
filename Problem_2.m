@@ -23,10 +23,10 @@ A = pi*(d/2)^2; % [m^2] Area
 m = .050; %[kg] Mass
 g = [0 0 9.8]; %[m/s^2] Gravity
 wind_vel = [5 0 0]; % dummy var :: three-dimensional wind velocity in inertial coordinates
-x_initial = [ 5 0 -5; 0 20 -20]; %[m/s] :: the position variables are all dummy
+x_initial = [ 5 0 -5 0 20 -20]'; %[m/s] :: the position variables are all dummy
 
 % Get State Vector
-x = [pEE; vEE];
+x = [xE_E, yE_E, zE_E, uE_E, vE_E, wE_E]';
 
 
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
