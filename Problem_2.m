@@ -51,6 +51,8 @@ hold on
 plot3()
 hold off
 
+%% Part b
+[rho,a,T,P,nu,ZorH] = stdatmo(1655,0,'',true); %[kg/m³] Air density
 
 %% Part e
 
