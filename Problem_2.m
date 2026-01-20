@@ -27,7 +27,7 @@ x_initial = [ 5 0 -5 0 20 -20]'; %[m/s] :: the position variables are all dummy
 
 % Get State Vector
 x = [xE_E, yE_E, zE_E, uE_E, vE_E, wE_E]';
-
+[t,x] = ode45(@(t,x) objectEOM(t,x_0,rho,Cd,A,m,g,wind_vel),tspan,statevector_0);
 
 xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel);
 
