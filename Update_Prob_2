@@ -1,3 +1,4 @@
+
 % Contributors: Ben Adams, Paris Larson
 % Course number: ASEN 3801
 % File name: Problem_2
@@ -19,7 +20,7 @@ clear all;
 close all;
 
 %% Variables
-tspan = [0 100]; %[s] dummy time range
+tspan = [0 5]; %[s] dummy time range
 [rho,a,T,P,nu,ZorH] = stdatmo(1655,0,'',true); %[kg/m³] Air density
 Cd = 0.6 ; %[NaN] Coefficient of drag
 d = 2.0 *10^-2; % [m] diameter
@@ -44,6 +45,7 @@ xE_E = xout(:,1);
 yE_E = xout(:,2);
 zE_E = xout(:,3);
 
+land_idx = find(diff(sign(zE_E), 1, 1) == 2);
 
 figure(Name="Problem 2 - part c")
 hold on
@@ -53,6 +55,52 @@ grid on;
 xlabel('North (m)');
 ylabel('East (m)');
 zlabel('Height (m)');
-title('Problem 2c: 3D Trajectory of Object');
+ylim([0 80])
+zlim([0 25])
+view(90,0)
+title('3D Trajectory of Object');
+
+hold off
+
+%% Problem 2 part d
+%varying the wind speeds
+var_wind_speeds = 0:2:70; %[m/s]
+
+x_land = zeros(size(var_wind_speeds));
+
+range_land = zeros(size(var_wind_speeds));
+
+for i = 1:length(var_wind_speeds)
+    %varying the wind speeds only in the North direction
+    wind_vel_d = [var_wind_speeds(i);0;0];
+
+    [~,xout_d] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,wind_vel_d),tspan,x0, options);
+    %final position of the sphere
+    land_position_x = xout_d(end,1);
+    land_position_y = xout_d(end,2);
+    %North displacement at landing
+    x_land(i) = land_position_x;
+    %distance from origin
+    range_land(i) = sqrt(land_position_x^2 + land_position_y^2);
+end
+
+
+figure(Name="Problem 2 - part d1")
+hold on
+plot(var_wind_speeds,x_land, 'LineWidth',2);
+grid on;
+xlabel('North Wind Speeds [m/s]');
+ylabel('North Landing Position [m]');
+title('Problem 2d: North Wind Speeds vs Landing Position');
+
+hold off
+
+figure(Name="Problem 2 - part d2")
+hold on
+plot(var_wind_speeds,range_land, 'LineWidth',2);
+grid on;
+xlabel('North Wind Speeds [m/s]');
+ylabel('Total Distance from origin [m]');
+title('Problem 2d: North Wind Speeds vs Total Distance from Origin');
 
 hold off
