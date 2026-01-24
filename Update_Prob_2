@@ -63,12 +63,18 @@ title('Problem 2c: 3D Trajectory of Object');
 hold off
 
 %% Problem 2 part d
+
+
 %varying the wind speeds
 var_wind_speeds = 0:1:70; %[m/s]
 
 x_land = zeros(size(var_wind_speeds));
 
 tot_distance = zeros(size(var_wind_speeds));
+
+%adjusts the tolerances so that the ODE stops integrating once the object
+%has landed
+options = odeset('RelTol',1e-8,'AbsTol',1e-8, 'Events', @landingEvent);
 
 for i = 1:length(var_wind_speeds)
     %varying the wind speeds only in the North direction
@@ -110,7 +116,7 @@ hold off
 
 %% Problem 2e
 %varying altitudes
-altitude = 0:1000:10000;
+altitude = 0:2000:10000;
 %total distance for part e
 tot_distance_e = zeros(size(var_wind_speeds));
 
@@ -148,8 +154,128 @@ end
 grid on;
 xlabel('North Wind Speeds [m/s]');
 ylabel('Total Distance from Origin [m]');
-legend('Alt = 0[m]','Alt = 1000[m]','Alt = 2000[m]','Alt = 3000[m]','Alt = 4000[m]', ...
-    'Alt = 5000[m]','Alt = 6000[m]','Alt = 7000[m]', 'Alt = 8000[m]', 'Alt = 9000[m]','Alt = 10000[m]', 'Location','best');
+legend('Alt = 0[m]','Alt = 2000[m]','Alt = 4000[m]','Alt = 6000[m]', 'Alt = 8000[m]', 'Alt = 10000[m]', 'Location','best');
 title('Problem 2e: North Wind Speeds vs Total Distance with varying Altitudes');
 
 hold off
+
+%% Problem 2 part f
+
+figure(Name="Problem 2 - part f")
+hold on
+
+% varying Mass
+var_m = [0.025 .05 .075 0.1 0.125]; %[kg]
+vEE_0_hat = vEE_0/norm(vEE_0);
+KE_original = m*vEE_0;
+
+%new wind speeds
+var_wind = [2 4 6 8 10];
+
+for i = 1:5  % Variable Mass
+    % new velocity vectors
+    %KE = .5*m*v
+    var_vEE_0 = 2*KE_original*(1/var_m(i));
+    var_x0 = [pEE_0; vEE_0];
+    max_distances = 1:5;
+    for n = 1:5  % Variable Wind
+        % output x
+        var_wind_vel = [0;var_wind(n);0];
+        [tout,xout] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,var_m(i),g, ...
+            var_wind_vel),tspan,var_x0, options);
+    
+        xE_E = xout(:,1);
+        yE_E = xout(:,2);
+        zE_E = xout(:,3);
+        
+        idx = find(diff(sign(zE_E)));
+        max_distances(n) = yE_E(max(idx));
+    end
+    
+    % %-zE_E to flip the Down axis into height
+    %plot3(xE_E, yE_E,-zE_E,'LineWidth',2);
+
+    scatter(var_wind,max_distances)
+end
+
+grid on;
+ylabel('Maximum Distance Reached (m)');
+xlabel('Wind Speed East (m/s)');
+%zlabel('Height (m)');
+title(['Problem 2f: Maximum Distance Reached vs Wind Speed' ...
+    'East w/ Varying Mass']);
+legend('0.025 kg','0.050 kg','0.075 kg', '0.100 kg' ,'0.125 kg', ...
+    Location="southeast")
+ylim("auto")
+xlim([0 12])
+%view(90,0)
+hold off
+
+%% FUNCTIONS
+function [value, isterminal, direction] = landingEvent(~, x)
+% 
+% Inputs:
+%     x = statevector of the object
+% 
+% Outputs:
+%     value = event funciton value (z-position)
+%     isterminal = flag indicating whether integration should terminate
+%     direction = direction of zero crossing that triggers the event
+% 
+% Methodology:
+%     This function is used to ODE45 to stop the numberical integration once
+%     the object lands on the ground, when ._E crosses from negative to posistive)
+
+    z = x(3);        % Down position
+    value = z;       % Stop when z = 0
+    isterminal = 1;  % Stop integration
+    direction = 1;   % Only trigger when crossing downward
+end
+
+function xdot = objectEOM(t,x,rho,Cd,A,m,g,wind_vel)
+% Contributors: Ben Adams, Paris Larson
+% Course number: ASEN 3801
+% File name: objectEOM.m
+% Created: 1/13/2026
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Inputs: t = time (s)
+%         x = State Vector [position; velocity] in inertial coordinates
+%            x = [x_E; y_E; z_E; vx_E; vy_E; vz_E]
+%         rho = 1.14 [kg/m³] Air density
+%         Cd = 0.6 [NaN] Coefficient of drag
+%         A = cross-sectional area (m^2)
+%         m = 50 [g] Mass
+%         g = gravitational acceleration (m/s^2)
+%         wind_vel = inertial wind velocity vector (m/s)
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+% Outputs: xdot = Derivative of State Vector x (with respect to time as a 
+%                    function of the time,the state, the physical 
+%                    parameters of the problem, and the three-dimensional 
+%                    wind velocity in inertial coordinates)
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+%Decomposing the statevector into position and velocity components
+position_E = x(1:3);
+velocity_E = x(4:6);
+
+%Air-relative velocity
+vE = velocity_E - wind_vel;
+V_air = norm(vE);
+
+%Drag force
+if V_air > 0
+    Fdrag = -(vE/ V_air).*((1/2).*Cd.*A.*rho.*V_air.^2);
+else
+    Fdrag = [0;0;0];
+end
+
+%Gravitional Force (NED: positive down)
+Fgravity = [0;0;m*g];
+
+accel_E = (Fdrag + Fgravity) / m;
+
+xdot = zeros(6,1);
+xdot(1:3) = velocity_E; %position derivative
+xdot(4:6) = accel_E; %velocity derivatice
+
+end
