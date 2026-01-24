@@ -23,19 +23,20 @@ close all;
 tspan = [0 5]; %[s] dummy time range
 [rho,a,T,P,nu,ZorH] = stdatmo(1655,0,'',true); %[kg/m³] Air density
 Cd = 0.6 ; %[NaN] Coefficient of drag
-d = 2.0 *10^-2; % [m] diameter
+d = 0.02; % [m] diameter
 A = pi*(d/2)^2; % [m^2] Area
 m = 0.050; %[kg] Mass
 g = 9.81; %[m/s^2] Gravity
 wind_vel = [0;0;0]; % dummy var :: three-dimensional wind velocity in inertial coordinates
 
 % Get State Vector
-pEE_0 = [0; 0; 0]; % starting x position UPDATE!!
-vEE_0 = [0; 20; -20]; % starting velocity x position UPDATE!!
+pEE_0 = [0; 0; 0]; % starting x position
+vEE_0 = [0; 20; -20]; % starting velocity x position
 % Statevector starting position
 x0 = [pEE_0; vEE_0];
 
 %% ODE options
+%tolerances
 options = odeset('RelTol',1e-8,'AbsTol',1e-8);
 
 %input options into brackets
@@ -57,31 +58,33 @@ ylabel('East (m)');
 zlabel('Height (m)');
 ylim([0 80])
 zlim([0 25])
-view(90,0)
-title('3D Trajectory of Object');
+title('Problem 2c: 3D Trajectory of Object');
 
 hold off
 
 %% Problem 2 part d
 %varying the wind speeds
-var_wind_speeds = 0:2:70; %[m/s]
+var_wind_speeds = 0:1:70; %[m/s]
 
 x_land = zeros(size(var_wind_speeds));
 
-range_land = zeros(size(var_wind_speeds));
+tot_distance = zeros(size(var_wind_speeds));
 
 for i = 1:length(var_wind_speeds)
     %varying the wind speeds only in the North direction
     wind_vel_d = [var_wind_speeds(i);0;0];
 
     [~,xout_d] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,wind_vel_d),tspan,x0, options);
-    %final position of the sphere
+
+    %final position of the object
     land_position_x = xout_d(end,1);
     land_position_y = xout_d(end,2);
+    
     %North displacement at landing
     x_land(i) = land_position_x;
+    
     %distance from origin
-    range_land(i) = sqrt(land_position_x^2 + land_position_y^2);
+    tot_distance(i) = sqrt(land_position_x^2 + land_position_y^2);
 end
 
 
@@ -97,10 +100,56 @@ hold off
 
 figure(Name="Problem 2 - part d2")
 hold on
-plot(var_wind_speeds,range_land, 'LineWidth',2);
+plot(var_wind_speeds,tot_distance, 'LineWidth',2);
 grid on;
 xlabel('North Wind Speeds [m/s]');
-ylabel('Total Distance from origin [m]');
-title('Problem 2d: North Wind Speeds vs Total Distance from Origin');
+ylabel('Total Distance from Origin [m]');
+title('Problem 2d: North Wind Speeds vs Total Distance');
+
+hold off
+
+%% Problem 2e
+%varying altitudes
+altitude = 0:1000:10000;
+%total distance for part e
+tot_distance_e = zeros(size(var_wind_speeds));
+
+geo_alt_distance = zeros(length(altitude), length(var_wind_speeds));
+
+%geo_alt_distance = [length(geo_altitudes), length(var_wind_speeds)];
+for j= 1:length(altitude)
+
+
+        %air density for altitude
+        [rho,a,T,P,nu,ZorH] = stdatmo(altitude(j),0,'',true); %[kg/m³] Air density
+
+    for i = 1:length(var_wind_speeds)
+        %varying the wind speeds only in the North direction
+        wind_vel_d = [var_wind_speeds(i);0;0];
+    
+        [~,xout_e] = ode45(@(t,x) objectEOM(t,x,rho,Cd,A,m,g,wind_vel_d),tspan,x0, options);
+
+        %final position of the object
+        land_position_x_e = xout_e(end,1);
+        land_position_y_e = xout_e(end,2);
+        
+        %geopotential altitude and its distance from origin
+        geo_alt_distance(j,i) = sqrt(land_position_x_e^2 + land_position_y_e^2);
+    
+    
+    end
+end
+
+figure(Name="Problem 2 - part e")
+hold on
+for k = 1:length(altitude)
+    plot(var_wind_speeds,geo_alt_distance(k,:), 'LineWidth',1);
+end
+grid on;
+xlabel('North Wind Speeds [m/s]');
+ylabel('Total Distance from Origin [m]');
+legend('Alt = 0[m]','Alt = 1000[m]','Alt = 2000[m]','Alt = 3000[m]','Alt = 4000[m]', ...
+    'Alt = 5000[m]','Alt = 6000[m]','Alt = 7000[m]', 'Alt = 8000[m]', 'Alt = 9000[m]','Alt = 10000[m]', 'Location','best');
+title('Problem 2e: North Wind Speeds vs Total Distance with varying Altitudes');
 
 hold off
